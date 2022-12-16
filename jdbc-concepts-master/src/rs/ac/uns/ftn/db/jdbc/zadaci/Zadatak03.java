@@ -10,7 +10,6 @@ import rs.ac.uns.ftn.db.jdbc.connection.ConnectionUtil_Basic;
 public class Zadatak03 {
 
 	public static void main(String[] args) {
-		
 		try {			
 			printBosses();
 		} catch (SQLException e) {
