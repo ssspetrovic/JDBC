@@ -8,7 +8,7 @@ import java.sql.Statement;
 import rs.ac.uns.ftn.db.jdbc.connection.ConnectionUtil_Basic;
 
 public class Zadatak03 {
-
+	
 	public static void main(String[] args) {
 		try {			
 			printBosses();
@@ -23,7 +23,8 @@ public class Zadatak03 {
 				+ "WHERE r2.sef IS NOT NULL\n"
 				+ "GROUP BY r1.ime, r1.prz, r1.plt, r1.mbr";
 		
-		int sef = -1;
+		String query2 = "SELECT r1.ime || ' ' || r1.prz as ime_prz_2, r1.plt FROM radnik r1, radnik r2\n"
+				+ "WHERE r1.sef = r2.mbr AND r1.sef = ";
 		
 		try (Connection connection = ConnectionUtil_Basic.getConnection();
 				Statement statement = connection.createStatement();
@@ -31,30 +32,21 @@ public class Zadatak03 {
 			if (!resultSet.isBeforeFirst()) {
 				System.out.println("no rows selected!");
 			} else {
+				int sef = -1;
 				while (resultSet.next()) {
-					System.out.printf("%-15s, %-4d, %-10d\n", resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3));
+					System.out.printf("\n%-17s, %-4d, %-10d\n", resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3));
 					sef = resultSet.getInt(4);
-					try {
-						printWorkers(connection, sef);
-					} catch (SQLException e) {
-						e.printStackTrace();
+					
+					try (Statement statement2 = connection.createStatement();
+							ResultSet resultSet2 = statement2.executeQuery(query2 + sef);) {
+						if (!resultSet2.isBeforeFirst()) {
+							System.out.println("no rows selected!");
+						} else {
+							while (resultSet2.next()) {
+								System.out.printf("\t%-17s, %-10d\n", resultSet2.getString(1), resultSet2.getInt(2));
+							}
+						}
 					}
-				}
-			}
-		}
-	}
-	
-	private static void printWorkers(Connection connection, int sef) throws SQLException {
-		String query = "SELECT r1.ime || ' ' || r1.prz as ime_prz_2, r1.plt FROM radnik r1, radnik r2\n"
-				+ "WHERE r1.sef = r2.mbr AND r1.sef = " + sef;
-		
-		try (Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery(query);) {
-			if (!resultSet.isBeforeFirst()) {
-				System.out.println("no rows selected!");
-			} else {
-				while (resultSet.next()) {
-					System.out.printf("\t%-25s, %-10d\n", resultSet.getString(1), resultSet.getInt(2));
 				}
 			}
 		}
