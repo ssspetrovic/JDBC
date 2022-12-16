@@ -35,6 +35,7 @@ public class Zadatak03 {
 				int sef = -1;
 				while (resultSet.next()) {
 					System.out.printf("\n%-17s, %-4d, %-10d\n", resultSet.getString(1), resultSet.getInt(2), resultSet.getInt(3));
+					
 					sef = resultSet.getInt(4);
 					
 					try (Statement statement2 = connection.createStatement();
