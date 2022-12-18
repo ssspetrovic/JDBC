@@ -1,27 +1,33 @@
 package rs.ac.uns.ftn.db.jdbc.pozoriste.service;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PodelaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PozoristeDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PredstavaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PrikazivanjeDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.ScenaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.UlogaDAO;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PodelaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PozoristeDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PredstavaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PrikazivanjeDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.ScenaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.UlogaDAOImpl;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PodelaDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PredstavaDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazivanjeDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazivanjeDeleteDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazivanjeScenaDTO;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.model.Podela;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.model.Pozoriste;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.model.Predstava;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.model.Prikazivanje;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.model.Scena;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.model.Uloga;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.ui_handler.MainUIHandler;
 
 public class ComplexFuncionalityService {
 
@@ -30,6 +36,7 @@ public class ComplexFuncionalityService {
 	private static final PrikazivanjeDAO prikazivanjeDAO = new PrikazivanjeDAOImpl();
 	private static final PredstavaDAO predstavaDAO = new PredstavaDAOImpl();
 	private static final UlogaDAO ulogaDAO = new UlogaDAOImpl();
+	private static final PodelaDAO podelaDAO = new PodelaDAOImpl();
 
 	public void showSceneForTheatre() {
 
@@ -97,8 +104,9 @@ public class ComplexFuncionalityService {
 									+ predstavaDAO.findCountOfRoles(prikazivanje.getIdpred()));
 							System.out.println();
 
-						}else{
-							System.out.println("\t\tNEMA PREDSTAVA ZA PRIKAZIVANJE NA OVOJ SCENI SA VISE OD 700 MESTA!");
+						} else {
+							System.out
+									.println("\t\tNEMA PREDSTAVA ZA PRIKAZIVANJE NA OVOJ SCENI SA VISE OD 700 MESTA!");
 						}
 					}
 					System.out.println();
@@ -151,6 +159,74 @@ public class ComplexFuncionalityService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// "IDPOD", "HONORAR", "DATUMD", "DATUMP", "ULOGA_IDUL", "GLUMAC_MBG"
+
+	public void showPodela() {
+//		Scanner sc = new Scanner(System.in);
+
+		String response;
+		do {
+			System.out.println("Da li zelite da unesete podatke u tabelu? (unesite Y kao potvrdu)");
+			if (!MainUIHandler.sc.nextLine().equalsIgnoreCase("Y"))
+				break;
+			
+			System.out.println("Unos podele u tabelu:");
+
+			System.out.println("IDPOD: ");
+			int idPod = Integer.parseInt(MainUIHandler.sc.nextLine());
+			
+			System.out.println("HONORAR: ");
+			double honorar = Double.parseDouble(MainUIHandler.sc.nextLine());
+			
+			System.out.println("DATUMD: ");
+			Date datumd = Date.valueOf(MainUIHandler.sc.nextLine());
+			
+			System.out.println("DATUMP: ");
+			Date datump = Date.valueOf(MainUIHandler.sc.nextLine());
+			
+			System.out.println("ULOGA_IDUL: ");
+			String uloga_idul = MainUIHandler.sc.nextLine();
+			
+			System.out.println("GLUMAC_MBG: ");
+			int glumac_mbg = Integer.parseInt(MainUIHandler.sc.nextLine());
+//			sc.close();
+			
+			try {
+				podelaDAO.save(new Podela(idPod, honorar, datumd, datump, uloga_idul, glumac_mbg));
+				System.out.println("Podela uspesno uneta!");
+			} catch (SQLException e) {
+				System.out.println(e.getMessage());
+			}
+
+			System.out.println("\nNastaviti sa unosom? (Pritisnuti X za prekid unosa)");
+			response = MainUIHandler.sc.nextLine();
+
+		} while (!response.equalsIgnoreCase("X"));
+		
+		System.out.println("\n----------------------------------------------- PODELE -----------------------------------------------");
+		System.out.println(Podela.getFormattedHeader());
+		try {
+			for (Podela podela : podelaDAO.findAll()) {
+				System.out.println(podela);
+			}
+			
+			System.out.println("\n----------------------------------------------- GLUMCI -----------------------------------------------");
+			HashMap<Integer, PodelaDTO> glumci = podelaDAO.listActorStats();
+			
+			System.out.println(PodelaDTO.getFormattedHeader());
+			for (int key : glumci.keySet()) {
+				System.out.println(glumci.get(key));
+			}
+			System.out.println("\n------------------------------------------------------------------------------------------------------");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	public void showUlogeGlumci() {
+		
 	}
 
 }

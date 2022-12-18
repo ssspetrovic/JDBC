@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.db.jdbc.pozoriste.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Podela {
 	private int idPod;
@@ -122,8 +122,11 @@ public class Podela {
 
 	@Override
 	public String toString() {
-		return "Podela [idPod=" + idPod + ", honorar=" + honorar + ", datumd=" + datumd + ", datump=" + datump
-				+ ", uloga_idul=" + uloga_idul + ", glumac_mbg=" + glumac_mbg + "]";
+		return String.format("%-6s %20f %-20s %-20s %-20s %-6s", idPod, honorar, datumd, datump, uloga_idul, glumac_mbg);
 	}
 
+	public static String getFormattedHeader() {
+		return String.format("%-6s %20s %-20s %-20s %-20s %-6s", "IDPOD", "HONORAR", "DATUMD", "DATUMP", "ULOGA_IDUL", "GLUMAC_MB");
+	}
+	
 }

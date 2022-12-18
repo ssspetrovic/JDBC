@@ -31,8 +31,9 @@ public class MainUIHandler {
 				break;
 			case "3":
 				complexQueryUIHandler.handleComplexQueryMenu();
+				break;
 			case "4":
-
+				
 			case "5":
 
 			}

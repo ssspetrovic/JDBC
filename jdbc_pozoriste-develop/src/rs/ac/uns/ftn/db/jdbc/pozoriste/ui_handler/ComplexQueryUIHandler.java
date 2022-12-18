@@ -67,10 +67,10 @@ public class ComplexQueryUIHandler {
 				complexQueryService.showShowingForDeleting();
 				break;
 			case "6":
-				// TODO implementirati
+				complexQueryService.showPodela();
 				break;
 			case "7":
-				// TODO implementirati
+				complexQueryService.showUlogeGlumci();
 				break;
 			case "8":
 				// TODO implementirati
