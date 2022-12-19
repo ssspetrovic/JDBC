@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.db.jdbc.pozoriste.service;
 
+import java.nio.file.spi.FileSystemProvider;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -7,17 +8,21 @@ import java.util.HashMap;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PodelaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PozoristeDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PredstavaDAO;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PrikazGlumacBezUlogaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.PrikazivanjeDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.ScenaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.UlogaDAO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PodelaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PozoristeDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PredstavaDAOImpl;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PrikazGlumacBezUlogaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.PrikazivanjeDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.ScenaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dao.impl.UlogaDAOImpl;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PodelaDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PredstavaDTO;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazGlumacBezUlogaDTO;
+import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazUlogeBezUpotrebeDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazivanjeDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazivanjeDeleteDTO;
 import rs.ac.uns.ftn.db.jdbc.pozoriste.dto.PrikazivanjeScenaDTO;
@@ -37,6 +42,7 @@ public class ComplexFuncionalityService {
 	private static final PredstavaDAO predstavaDAO = new PredstavaDAOImpl();
 	private static final UlogaDAO ulogaDAO = new UlogaDAOImpl();
 	private static final PodelaDAO podelaDAO = new PodelaDAOImpl();
+	private static final PrikazGlumacBezUlogaDAO prikazGlumcaBezUlogeDAO = new PrikazGlumacBezUlogaDAOImpl();
 
 	public void showSceneForTheatre() {
 
@@ -226,7 +232,21 @@ public class ComplexFuncionalityService {
 	}
 	
 	public void showUlogeGlumci() {
-		
+		try {
+			for (PrikazUlogeBezUpotrebeDTO prikazUloge : prikazGlumcaBezUlogeDAO.getUlogeBezupotrebe()) {
+				System.out.println("===============================================================================");
+				System.out.println(PrikazUlogeBezUpotrebeDTO.getFormattedHeader());
+				System.out.println(prikazUloge);
+				System.out.println("===============================================================================");
+				System.out.println(PrikazGlumacBezUlogaDTO.getFormattedHeader());
+				for (PrikazGlumacBezUlogaDTO prikazGlumca : prikazGlumcaBezUlogeDAO.getGlumcibezUloga(prikazUloge.getIdpred())) {
+					System.out.println(prikazGlumca);		
+				}
+				System.out.println("-------------------------------------------------------------------------------\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
