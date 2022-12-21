@@ -41,12 +41,12 @@ public class PrikazUlogeBezUpotrebeDTO {
 	}
 
 	public static String getFormattedHeader() {
-		return String.format("\n%-6s %-15s %-6s", "IDUL", "IMEULO", "IDPRED");
+		return String.format("\t\t\t%-6s %-15s %-6s", "IDUL", "IMEULO", "IDPRED");
 	}
 
 	@Override
 	public String toString() {
-		return String.format("%-6d %-15s %-6d", idul, imeulo, idpred);
+		return String.format("\t\t\t%-6d %-15s %-6d", idul, imeulo, idpred);
 	}
 
 }

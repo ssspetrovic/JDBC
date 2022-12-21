@@ -51,12 +51,12 @@ public class PrikazGlumacBezUlogaDTO {
 	}
 
 	public static String getFormattedHeader() {
-		return String.format("%-6s %-12s %-4s %-30s", "MBG", "IMEG", "IDPOZ", "NAZIVPOZ");
+		return String.format("\t%-6s %-12s %-6s %-30s", "MBG", "IMEG", "IDPOZ", "NAZIVPOZ");
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("\t%-6d %-12s %-4d %-30s", mbg, imeg, idpoz, nazivpoz);
+		return String.format("\t%-6d %-12s %-6d %-30s", mbg, imeg, idpoz, nazivpoz);
 	}
 
 }

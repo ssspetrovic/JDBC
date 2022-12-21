@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.db.jdbc.pozoriste.service;
 
-import java.nio.file.spi.FileSystemProvider;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
